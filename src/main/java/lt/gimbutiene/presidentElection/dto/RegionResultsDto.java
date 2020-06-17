@@ -5,6 +5,15 @@ public class RegionResultsDto {
     private String name;
     private ElectionResultsByCandidateDto resultsByCandidate;
 
+    public RegionResultsDto() {
+    }
+
+    public RegionResultsDto(final Long regionId, final String name, final ElectionResultsByCandidateDto resultsByCandidate) {
+        this.regionId = regionId;
+        this.name = name;
+        this.resultsByCandidate = resultsByCandidate;
+    }
+
     public Long getRegionId() {
         return regionId;
     }

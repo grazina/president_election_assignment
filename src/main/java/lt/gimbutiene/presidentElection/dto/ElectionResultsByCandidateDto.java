@@ -7,6 +7,15 @@ public class ElectionResultsByCandidateDto {
     private Long totalVotersCount;
     private List<CandidateResultsDto> candidateResults;
 
+    public ElectionResultsByCandidateDto() {
+    }
+
+    public ElectionResultsByCandidateDto(final Long activeVotersCount, final Long totalVotersCount, final List<CandidateResultsDto> candidateResults) {
+        this.activeVotersCount = activeVotersCount;
+        this.totalVotersCount = totalVotersCount;
+        this.candidateResults = candidateResults;
+    }
+
     public Long getActiveVotersCount() {
         return activeVotersCount;
     }

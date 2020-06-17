@@ -1,9 +1,7 @@
 package lt.gimbutiene.presidentElection.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Candidate {
@@ -13,6 +11,9 @@ public class Candidate {
     private String name;
     private Long number;
     private String agenda;
+
+    @OneToMany(mappedBy = "selectedCandidate")
+    private List<Voter> voters;
 
     public Long getId() {
         return id;
@@ -44,5 +45,13 @@ public class Candidate {
 
     public void setAgenda(final String agenda) {
         this.agenda = agenda;
+    }
+
+    public List<Voter> getVoters() {
+        return voters;
+    }
+
+    public void setVoters(final List<Voter> voters) {
+        this.voters = voters;
     }
 }

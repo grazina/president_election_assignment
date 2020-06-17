@@ -5,8 +5,8 @@ import lt.gimbutiene.presidentElection.dto.ElectionResultsByCandidateDto;
 import lt.gimbutiene.presidentElection.dto.RegionResultsDto;
 import lt.gimbutiene.presidentElection.dto.VoteDto;
 import lt.gimbutiene.presidentElection.exception.VoterServiceException;
+import lt.gimbutiene.presidentElection.facade.CandidatesFacade;
 import lt.gimbutiene.presidentElection.facade.VoterFacade;
-import lt.gimbutiene.presidentElection.service.CandidateService;
 import lt.gimbutiene.presidentElection.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ElectionController {
 
     @Autowired
-    private CandidateService candidateService;
+    private CandidatesFacade candidatesFacade;
 
     @Autowired
     private VoterService voterService;
@@ -28,7 +28,7 @@ public class ElectionController {
 
     @GetMapping("/getCandidates")
     public List<CandidateDto> getCandidates() {
-        return candidateService.getCandidates();
+        return candidatesFacade.getCandidates();
     }
 
     @PostMapping("/vote")

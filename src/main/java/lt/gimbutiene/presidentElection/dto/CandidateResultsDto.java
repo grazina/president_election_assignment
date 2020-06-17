@@ -4,6 +4,14 @@ public class CandidateResultsDto {
     private CandidateDto candidate;
     private Long candidateVotesCount;
 
+    public CandidateResultsDto() {
+    }
+
+    public CandidateResultsDto(final CandidateDto candidate, final Long candidateVotesCount) {
+        this.candidate = candidate;
+        this.candidateVotesCount = candidateVotesCount;
+    }
+
     public CandidateDto getCandidate() {
         return candidate;
     }
