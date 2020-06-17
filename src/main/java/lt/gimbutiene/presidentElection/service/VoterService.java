@@ -9,6 +9,7 @@ import lt.gimbutiene.presidentElection.repository.VoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,7 +19,7 @@ public class VoterService {
 
     @Autowired
     private VoterRepository voterRepository;
-    
+
     public void addVote(final VoteDto voteDto) throws VoterServiceException {
         final Voter voter = findVoter(voteDto.getVoterId());
         if (voter.getSelectedCandidate() != null) {
@@ -52,6 +53,10 @@ public class VoterService {
         }
 
         return optionalCandidate.get();
+    }
+
+    public List<Voter> getAllVoters() {
+        return voterRepository.findAll();
     }
 
     public void setCandidateRepository(final CandidateRepository candidateRepository) {
