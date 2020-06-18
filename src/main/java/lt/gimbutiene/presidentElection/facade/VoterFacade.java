@@ -7,17 +7,21 @@ import lt.gimbutiene.presidentElection.domain.Voter;
 import lt.gimbutiene.presidentElection.dto.CandidateResultsDto;
 import lt.gimbutiene.presidentElection.dto.ElectionResultsByCandidateDto;
 import lt.gimbutiene.presidentElection.dto.RegionResultsDto;
+import lt.gimbutiene.presidentElection.dto.WinnerDto;
 import lt.gimbutiene.presidentElection.service.CandidateService;
 import lt.gimbutiene.presidentElection.service.RegionService;
 import lt.gimbutiene.presidentElection.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class VoterFacade {
+    private static final double WINNER_THRESHOLD = 0.5;
+
     @Autowired
     private VoterService voterService;
 
@@ -33,7 +37,7 @@ public class VoterFacade {
     public ElectionResultsByCandidateDto getElectionResultsByCandidate() {
         final List<Candidate> candidates = candidateService.getAllCandidates();
         final List<Voter> voters = voterService.getAllVoters();
-        final List<Voter> activeVoters = voters.stream().filter(voter -> voter.getSelectedCandidate() != null).collect(Collectors.toList());
+        final List<Voter> activeVoters = filterActiveVoters(voters);
 
         final List<CandidateResultsDto> candidateResultsDtos = candidates.stream()
                 .map(candidate -> new CandidateResultsDto(candidateConverter.convert(candidate), (long) candidate.getVoters().size())).collect(Collectors.toList());
@@ -48,7 +52,7 @@ public class VoterFacade {
 
     private RegionResultsDto makeRegionResultsDto(final Region region, final List<Candidate> candidates, final List<Voter> voters) {
         final List<Voter> votersInRegion = voters.stream().filter(voter -> region.getId().equals(voter.getRegion().getId())).collect(Collectors.toList());
-        final List<Voter> activeVotersInRegion = votersInRegion.stream().filter(voter -> voter.getSelectedCandidate() != null).collect(Collectors.toList());
+        final List<Voter> activeVotersInRegion = filterActiveVoters(votersInRegion);
 
         final List<CandidateResultsDto> candidateResultsInRegion = candidates.stream()
                 .map(candidate -> new CandidateResultsDto(candidateConverter.convert(candidate), getCandidateVotersInRegionCount(candidate, region)))
@@ -64,6 +68,35 @@ public class VoterFacade {
         final List<Voter> candidateVotersInRegion = candidate.getVoters().stream()
                 .filter(voter -> region.getId().equals(voter.getRegion().getId())).collect(Collectors.toList());
         return candidateVotersInRegion.size();
+    }
+
+    public WinnerDto getElectionWinner() {
+        final List<Candidate> top2Candidates = candidateService.getAllCandidates().stream()
+                .sorted(Comparator.comparingInt((Candidate c) -> c.getVoters().size()).reversed()).limit(2).collect(Collectors.toList());
+
+        final Candidate firstCandidate = top2Candidates.get(0);
+        final Candidate secondCandidate = top2Candidates.get(1);
+
+        final List<Voter> voters = voterService.getAllVoters();
+        final List<Voter> activeVoters = filterActiveVoters(voters);
+
+        final WinnerDto winnerDto = new WinnerDto();
+        winnerDto.setTotalVotersCount((long) voters.size());
+        winnerDto.setActiveVotersCount((long) activeVoters.size());
+        winnerDto.setFirstCandidate(new CandidateResultsDto(candidateConverter.convert(firstCandidate), (long) firstCandidate.getVoters().size()));
+        winnerDto.setSingleWinner(isSingleWinner(firstCandidate, activeVoters.size()));
+        if (!winnerDto.isSingleWinner()) {
+            winnerDto.setSecondCandidate(new CandidateResultsDto(candidateConverter.convert(secondCandidate), (long) secondCandidate.getVoters().size()));
+        }
+        return winnerDto;
+    }
+
+    private boolean isSingleWinner(final Candidate topCandidate, final int votersCount) {
+        return topCandidate.getVoters().size() / (double) votersCount > WINNER_THRESHOLD;
+    }
+
+    private List<Voter> filterActiveVoters(final List<Voter> voters) {
+        return voters.stream().filter(voter -> voter.getSelectedCandidate() != null).collect(Collectors.toList());
     }
 
     public void setVoterService(final VoterService voterService) {

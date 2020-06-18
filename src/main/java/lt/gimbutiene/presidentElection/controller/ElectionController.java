@@ -1,9 +1,6 @@
 package lt.gimbutiene.presidentElection.controller;
 
-import lt.gimbutiene.presidentElection.dto.CandidateDto;
-import lt.gimbutiene.presidentElection.dto.ElectionResultsByCandidateDto;
-import lt.gimbutiene.presidentElection.dto.RegionResultsDto;
-import lt.gimbutiene.presidentElection.dto.VoteDto;
+import lt.gimbutiene.presidentElection.dto.*;
 import lt.gimbutiene.presidentElection.exception.VoterServiceException;
 import lt.gimbutiene.presidentElection.facade.CandidatesFacade;
 import lt.gimbutiene.presidentElection.facade.VoterFacade;
@@ -44,5 +41,10 @@ public class ElectionController {
     @GetMapping("/getElectionResultsByRegion")
     public List<RegionResultsDto> getElectionResultsByRegion() {
         return voterFacade.getElectionResultsByRegion();
+    }
+
+    @GetMapping("/getElectionWinner")
+    public WinnerDto getElectionWinner() {
+        return voterFacade.getElectionWinner();
     }
 }
