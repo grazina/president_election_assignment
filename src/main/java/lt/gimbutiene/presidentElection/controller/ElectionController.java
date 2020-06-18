@@ -4,7 +4,6 @@ import lt.gimbutiene.presidentElection.dto.*;
 import lt.gimbutiene.presidentElection.exception.VoterServiceException;
 import lt.gimbutiene.presidentElection.facade.CandidatesFacade;
 import lt.gimbutiene.presidentElection.facade.VoterFacade;
-import lt.gimbutiene.presidentElection.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +17,6 @@ public class ElectionController {
     private CandidatesFacade candidatesFacade;
 
     @Autowired
-    private VoterService voterService;
-
-    @Autowired
     private VoterFacade voterFacade;
 
     @GetMapping("/getCandidates")
@@ -30,7 +26,7 @@ public class ElectionController {
 
     @PostMapping("/vote")
     public void vote(@RequestBody final VoteDto voteDto) throws VoterServiceException {
-        voterService.addVote(voteDto);
+        voterFacade.addVote(voteDto);
     }
 
     @GetMapping("/getElectionResults")

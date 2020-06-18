@@ -2,7 +2,6 @@ package lt.gimbutiene.presidentElection.service;
 
 import lt.gimbutiene.presidentElection.domain.Candidate;
 import lt.gimbutiene.presidentElection.domain.Voter;
-import lt.gimbutiene.presidentElection.dto.VoteDto;
 import lt.gimbutiene.presidentElection.exception.VoterServiceException;
 import lt.gimbutiene.presidentElection.repository.CandidateRepository;
 import lt.gimbutiene.presidentElection.repository.VoterRepository;
@@ -25,7 +24,6 @@ class VoterServiceTest {
 
     private final Voter voterMock = mock(Voter.class);
     private final Candidate candidateMock = mock(Candidate.class);
-    private final VoteDto voteDto = new VoteDto();
 
     @BeforeEach
     public void setUp() {
@@ -34,50 +32,45 @@ class VoterServiceTest {
 
         voterService.setCandidateRepository(candidateRepositoryMock);
         voterService.setVoterRepository(voterRepositoryMock);
-
-        voteDto.setVoterId(VOTER_ID);
-        voteDto.setSelectedCandidateId(CANDIDATE_ID);
     }
 
     @Test
-    public void shouldSaveValidVote() throws VoterServiceException {
-        voterService.addVote(voteDto);
+    public void shouldSaveValidVote() {
+        voterService.addVote(VOTER_ID, CANDIDATE_ID);
         verify(voterMock).setSelectedCandidate(candidateMock);
         verify(voterRepositoryMock).save(voterMock);
     }
 
     @Test
     public void shouldThrowExceptionIfVoterIdIsEmpty() {
-        voteDto.setVoterId(null);
         assertThrows(VoterServiceException.class, () ->
-                voterService.addVote(voteDto));
+                voterService.addVote(null, CANDIDATE_ID));
     }
 
     @Test
     public void shouldThrowExceptionIfVoterIdIsUnknown() {
         when(voterRepositoryMock.findById(VOTER_ID)).thenReturn(Optional.empty());
         assertThrows(VoterServiceException.class, () ->
-                voterService.addVote(voteDto));
+                voterService.addVote(VOTER_ID, CANDIDATE_ID));
     }
 
     @Test
     public void shouldThrowExceptionIfSelectedCandidateIdIsEmpty() {
-        voteDto.setSelectedCandidateId(null);
         assertThrows(VoterServiceException.class, () ->
-                voterService.addVote(voteDto));
+                voterService.addVote(VOTER_ID, null));
     }
 
     @Test
     public void shouldThrowExceptionIfCandidateIdIsUnknown() {
         when(candidateRepositoryMock.findById(CANDIDATE_ID)).thenReturn(Optional.empty());
         assertThrows(VoterServiceException.class, () ->
-                voterService.addVote(voteDto));
+                voterService.addVote(VOTER_ID, CANDIDATE_ID));
     }
 
     @Test
     public void shouldThrowExceptionWhenVotingAgain() {
         when(voterMock.getSelectedCandidate()).thenReturn(candidateMock);
         assertThrows(VoterServiceException.class, () ->
-                voterService.addVote(voteDto));
+                voterService.addVote(VOTER_ID, CANDIDATE_ID));
     }
 }

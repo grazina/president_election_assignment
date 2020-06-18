@@ -4,10 +4,7 @@ import lt.gimbutiene.presidentElection.converter.CandidateConverter;
 import lt.gimbutiene.presidentElection.domain.Candidate;
 import lt.gimbutiene.presidentElection.domain.Region;
 import lt.gimbutiene.presidentElection.domain.Voter;
-import lt.gimbutiene.presidentElection.dto.CandidateResultsDto;
-import lt.gimbutiene.presidentElection.dto.ElectionResultsByCandidateDto;
-import lt.gimbutiene.presidentElection.dto.RegionResultsDto;
-import lt.gimbutiene.presidentElection.dto.WinnerDto;
+import lt.gimbutiene.presidentElection.dto.*;
 import lt.gimbutiene.presidentElection.service.CandidateService;
 import lt.gimbutiene.presidentElection.service.RegionService;
 import lt.gimbutiene.presidentElection.service.VoterService;
@@ -33,6 +30,10 @@ public class VoterFacade {
 
     @Autowired
     private RegionService regionService;
+
+    public void addVote(final VoteDto voteDto) {
+        voterService.addVote(voteDto.getVoterId(), voteDto.getSelectedCandidateId());
+    }
 
     public ElectionResultsByCandidateDto getElectionResultsByCandidate() {
         final List<Candidate> candidates = candidateService.getAllCandidates();
@@ -105,5 +106,13 @@ public class VoterFacade {
 
     public void setCandidateConverter(final CandidateConverter candidateConverter) {
         this.candidateConverter = candidateConverter;
+    }
+
+    public void setCandidateService(final CandidateService candidateService) {
+        this.candidateService = candidateService;
+    }
+
+    public void setRegionService(final RegionService regionService) {
+        this.regionService = regionService;
     }
 }

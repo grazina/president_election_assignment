@@ -2,7 +2,6 @@ package lt.gimbutiene.presidentElection.service;
 
 import lt.gimbutiene.presidentElection.domain.Candidate;
 import lt.gimbutiene.presidentElection.domain.Voter;
-import lt.gimbutiene.presidentElection.dto.VoteDto;
 import lt.gimbutiene.presidentElection.exception.VoterServiceException;
 import lt.gimbutiene.presidentElection.repository.CandidateRepository;
 import lt.gimbutiene.presidentElection.repository.VoterRepository;
@@ -20,12 +19,12 @@ public class VoterService {
     @Autowired
     private VoterRepository voterRepository;
 
-    public void addVote(final VoteDto voteDto) throws VoterServiceException {
-        final Voter voter = findVoter(voteDto.getVoterId());
+    public void addVote(final Long voterId, final Long selectedCandidateId) throws VoterServiceException {
+        final Voter voter = findVoter(voterId);
         if (voter.getSelectedCandidate() != null) {
-            throw new VoterServiceException(String.format("Voter with ID=%d has already voted before.", voteDto.getVoterId()));
+            throw new VoterServiceException(String.format("Voter with ID=%d has already voted before.", voterId));
         }
-        final Candidate candidate = findCandidate(voteDto.getSelectedCandidateId());
+        final Candidate candidate = findCandidate(selectedCandidateId);
         voter.setSelectedCandidate(candidate);
         voterRepository.save(voter);
     }
