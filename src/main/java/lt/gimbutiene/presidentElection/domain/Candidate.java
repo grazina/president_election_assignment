@@ -12,7 +12,7 @@ public class Candidate {
     private Long number;
     private String agenda;
 
-    @OneToMany(mappedBy = "selectedCandidate")
+    @OneToMany(mappedBy = "selectedCandidate", fetch = FetchType.EAGER)
     private List<Voter> voters;
 
     public Long getId() {
