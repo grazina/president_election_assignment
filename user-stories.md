@@ -11,6 +11,7 @@
             <li><b>agenda</b>. Summary of the candidate agenda.</li>
         </ol>
     </li>
+    <li>In the response, the candidates must be ordered by the <b>number</b> field.</li>
 </ol>
 
 Example output:
