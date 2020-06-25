@@ -22,7 +22,7 @@ public class ElectionController {
 
     @GetMapping("/getCandidates")
     @ApiOperation(value = "Get the list of candidates")
-    public List<CandidateDto> getCandidates() {
+    public List<CandidateInfoDto> getCandidates() {
         return candidateFacade.getCandidates();
     }
 

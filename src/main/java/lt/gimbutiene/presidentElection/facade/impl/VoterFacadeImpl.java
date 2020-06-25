@@ -1,6 +1,6 @@
 package lt.gimbutiene.presidentElection.facade.impl;
 
-import lt.gimbutiene.presidentElection.converter.CandidateConverter;
+import lt.gimbutiene.presidentElection.converter.CandidateBaseConverter;
 import lt.gimbutiene.presidentElection.domain.Candidate;
 import lt.gimbutiene.presidentElection.domain.Region;
 import lt.gimbutiene.presidentElection.domain.Voter;
@@ -24,7 +24,7 @@ public class VoterFacadeImpl implements VoterFacade {
     private VoterService voterService;
 
     @Autowired
-    private CandidateConverter candidateConverter;
+    private CandidateBaseConverter candidateBaseConverter;
 
     @Autowired
     private CandidateService candidateService;
@@ -44,7 +44,7 @@ public class VoterFacadeImpl implements VoterFacade {
         final List<Voter> activeVoters = filterActiveVoters(voters);
 
         final List<CandidateResultsDto> candidateResultsDtos = candidates.stream()
-                .map(candidate -> new CandidateResultsDto(candidateConverter.convert(candidate), (long) candidate.getVoters().size())).collect(Collectors.toList());
+                .map(candidate -> new CandidateResultsDto(candidateBaseConverter.convert(candidate), (long) candidate.getVoters().size())).collect(Collectors.toList());
         return new ElectionResultsByCandidateDto((long) activeVoters.size(), (long) voters.size(), candidateResultsDtos);
     }
 
@@ -60,7 +60,7 @@ public class VoterFacadeImpl implements VoterFacade {
         final List<Voter> activeVotersInRegion = filterActiveVoters(votersInRegion);
 
         final List<CandidateResultsDto> candidateResultsInRegion = candidates.stream()
-                .map(candidate -> new CandidateResultsDto(candidateConverter.convert(candidate), getCandidateVotersInRegionCount(candidate, region)))
+                .map(candidate -> new CandidateResultsDto(candidateBaseConverter.convert(candidate), getCandidateVotersInRegionCount(candidate, region)))
                 .collect(Collectors.toList());
 
         final ElectionResultsByCandidateDto resultsByCandidate =
@@ -89,10 +89,10 @@ public class VoterFacadeImpl implements VoterFacade {
         final WinnerDto winnerDto = new WinnerDto();
         winnerDto.setTotalVotersCount((long) voters.size());
         winnerDto.setActiveVotersCount((long) activeVoters.size());
-        winnerDto.setFirstCandidate(new CandidateResultsDto(candidateConverter.convert(firstCandidate), (long) firstCandidate.getVoters().size()));
+        winnerDto.setFirstCandidate(new CandidateResultsDto(candidateBaseConverter.convert(firstCandidate), (long) firstCandidate.getVoters().size()));
         winnerDto.setSingleWinner(isSingleWinner(firstCandidate, activeVoters.size()));
         if (!winnerDto.isSingleWinner()) {
-            winnerDto.setSecondCandidate(new CandidateResultsDto(candidateConverter.convert(secondCandidate), (long) secondCandidate.getVoters().size()));
+            winnerDto.setSecondCandidate(new CandidateResultsDto(candidateBaseConverter.convert(secondCandidate), (long) secondCandidate.getVoters().size()));
         }
         return winnerDto;
     }
@@ -109,8 +109,8 @@ public class VoterFacadeImpl implements VoterFacade {
         this.voterService = voterService;
     }
 
-    public void setCandidateConverter(final CandidateConverter candidateConverter) {
-        this.candidateConverter = candidateConverter;
+    public void setCandidateBaseConverter(final CandidateBaseConverter candidateBaseConverter) {
+        this.candidateBaseConverter = candidateBaseConverter;
     }
 
     public void setCandidateService(final CandidateService candidateService) {

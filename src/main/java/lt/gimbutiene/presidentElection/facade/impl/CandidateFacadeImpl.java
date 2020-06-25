@@ -1,7 +1,7 @@
 package lt.gimbutiene.presidentElection.facade.impl;
 
-import lt.gimbutiene.presidentElection.converter.CandidateConverter;
-import lt.gimbutiene.presidentElection.dto.CandidateDto;
+import lt.gimbutiene.presidentElection.converter.CandidateInfoConverter;
+import lt.gimbutiene.presidentElection.dto.CandidateInfoDto;
 import lt.gimbutiene.presidentElection.facade.CandidateFacade;
 import lt.gimbutiene.presidentElection.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ public class CandidateFacadeImpl implements CandidateFacade {
     private CandidateService candidateService;
 
     @Autowired
-    private CandidateConverter candidateConverter;
+    private CandidateInfoConverter candidateInfoConverter;
 
     @Override
-    public List<CandidateDto> getCandidates() {
-        return candidateService.getAllCandidates().stream().map(c -> candidateConverter.convert(c)).collect(Collectors.toList());
+    public List<CandidateInfoDto> getCandidates() {
+        return candidateService.getAllCandidates().stream().map(c -> candidateInfoConverter.convert(c)).collect(Collectors.toList());
     }
 }

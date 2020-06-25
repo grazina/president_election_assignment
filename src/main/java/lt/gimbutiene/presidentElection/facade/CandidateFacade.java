@@ -1,9 +1,9 @@
 package lt.gimbutiene.presidentElection.facade;
 
-import lt.gimbutiene.presidentElection.dto.CandidateDto;
+import lt.gimbutiene.presidentElection.dto.CandidateInfoDto;
 
 import java.util.List;
 
 public interface CandidateFacade {
-    List<CandidateDto> getCandidates();
+    List<CandidateInfoDto> getCandidates();
 }

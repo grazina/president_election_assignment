@@ -2,7 +2,7 @@
 
 ## As a Voter, I want to see the list of candidates, so that I could select the one to vote for
 <ol>
-    <li>Endpoint <b>/api/election/getCandidates</b> must return a list of <b>Candidate</b> objects with the
+    <li>Endpoint <b>/api/election/getCandidates</b> must return a list of <a name="candidate-obj"><b>Candidate</b></a> objects with the
         following structure:
         <ol>
             <li><b>id</b>. This is the unique identifier of the candidate in the system.</li>
@@ -48,23 +48,27 @@ Example output:
 Example input:
 
     {
-      "selectedCandidateId": 0,
-      "voterId": 0
+      "selectedCandidateId": 1,
+      "voterId": 125433
     }
 
 ## As a Voter, I want to view the election result report, so that I could compare the overall vote counts of the candidates 
 <ol>
-    <li>Endpoint <b>/api/election/getElectionResults</b> must return the overall distribution of the votes among the candidates.
-    An <b>Election results by candidate</b> object with the following structure must be returned:
+<li>Endpoint <b>/api/election/getElectionResults</b> must return the overall distribution of the votes among the candidates.
+    An <a name="election-results-obj"><b>Election results by candidate</b></a> object with the following structure must be returned:
     <ol>
         <li><b>activeVotersCount</b>. The number of voters that have placed their votes. </li>
-        <li><b>totalVotersCount</b>. The total number of voters.</li>  
-        <li><b>candidateResults</b>. A list of <b>Candidate results</b> objects with the following structure:
+        <li><b>totalVotersCount</b>. The total number of voters.</li>
+        <li><b>candidateResults</b>. A list of <a name="candidate-results-obj"><b>Candidate results</b></a> objects with the following structure:
             <ol>
-                <li><b>candidate</b>. A <b>Candidate</b> object, see above.</li>
+                <li><b>candidate</b>. A <b>Candidate</b> object <a href="#candidate-obj">(see above)</a>, 
+                		        where only <b>id</b> and <b>name</b> fields are filled.
+                </li>
                 <li><b>candidateVotesCount</b>. Number of voters that have voted for this candidate.</li>
             </ol>
+        </li>  
     </ol>
+    </li>
 </ol>
 
 Example output:
@@ -76,18 +80,14 @@ Example output:
           {
             "candidate": {
               "id": 1,
-              "name": "Gitanas Nausėda",
-              "number": 1,
-              "agenda": "Lietuva – transatlantinėje erdvėje"
+              "name": "Gitanas Nausėda"
             },
             "candidateVotesCount": 881495
           },
           {
             "candidate": {
               "id": 2,
-              "name": "Ingrida Šimonytė",
-              "number": 2,
-              "agenda": "Vakarų vertybės ir į vakarus orietuota užsienio politika"
+              "name": "Ingrida Šimonytė"
             },
             "candidateVotesCount": 443394
           }
@@ -102,7 +102,7 @@ Example output:
     <ol>
         <li><b>regionId</b>. This is the unique identifier of the region in the system.</li>
         <li><b>regionName</b>. Region name.</li>
-        <li><b>resultsByCandidate</b>. An <b>Election results by candidate</b> object. 
+        <li><b>resultsByCandidate</b>. An <b>Election results by candidate</b> object <a href="#election-results-obj">(see above)</a>. 
         Figures contained by this object (i.e. active voters count, total voters count, candidate votes count) 
         must be computed based on the portion of the voters from this particular region. 
     </ol>
@@ -114,7 +114,7 @@ Example output:
     [
       {
         "regionId": 1,
-        "name": "Alytaus apskr.",
+        "regionName": "Alytaus apskr.",
         "resultsByCandidate": {
           "activeVotersCount": 100000,
           "totalVotersCount": 200000,
@@ -122,18 +122,14 @@ Example output:
             {
               "candidate": {
                 "id": 4,
-                "name": "Gitanas Nausėda",
-                "number": 4,
-                "agenda": "Lietuva – transatlantinėje erdvėje"
+                "name": "Gitanas Nausėda"
               },
               "candidateVotesCount": 60000
             },
             {
               "candidate": {
                 "id": 8,
-                "name": "Ingrida Šimonytė",
-                "number": 8,
-                "agenda": "Vakarų vertybės ir į vakarus orietuota užsienio politika"
+                "name": "Ingrida Šimonytė"
               },
               "candidateVotesCount": 40000
             }
@@ -151,8 +147,8 @@ Example output:
         This field is TRUE if the top candidate has acquired more than 50% of the votes.</li>
         <li><b>totalVotersCount</b>. The total number of voters.</li>
         <li><b>activeVotersCount</b>. The number of active voters.</li>
-        <li><b>firstCandidate</b>. A <b>Candidate results</b> object (see above) for the top candidate. 
-        <li><b>secondCandidate</b>. A <b>Candidate results</b> (see above) object for the second top candidate.
+        <li><b>firstCandidate</b>. A <b>Candidate results</b> object <a href="#candidate-results-obj">(see above)</a> for the top candidate. 
+        <li><b>secondCandidate</b>. A <b>Candidate results</b> <a href="#candidate-results-obj">(see above)</a> object for the second top candidate.
          This field must be filled only if there is no single winner.</li>
     </ol>
     </li>
@@ -167,9 +163,7 @@ Example output, when there is a single winner:
       "firstCandidate": {
         "candidate": {
           "id": 4,
-          "name": "Gitanas Nausėda",
-          "number": 4,
-          "agenda": "Lietuva – transatlantinėje erdvėje"
+          "name": "Gitanas Nausėda"
         },
         "candidateVotesCount": 60000
       },
